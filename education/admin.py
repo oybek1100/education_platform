@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Subject , Course , Module , Text , Video , Image , File , Topic , Comment
+from .models import Subject , Course , Module , Text , Video , Image , File , Topic , Comment ,Students
 
 admin.site.register(Course)
 admin.site.register(Subject)
@@ -10,4 +10,4 @@ admin.site.register(Image)
 admin.site.register(File)
 admin.site.register(Topic)
 admin.site.register(Comment)
-
+admin.site.register(Students)

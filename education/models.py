@@ -110,3 +110,15 @@ class Comment(models.Model):
     text = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+
+class Students(models.Model):
+    name = models.CharField(max_length=255)
+    students_opinion = models.TextField(null=True, blank=True)
+    students_image = models.ImageField(upload_to='student/images')
+    course = models.ForeignKey(Course, related_name='student', on_delete=models.SET_NULL, null=True, blank=True)
+
+
+    def __str__(self):
+        return self.name
+

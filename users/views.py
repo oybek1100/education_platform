@@ -13,7 +13,6 @@ from django.utils.encoding import force_bytes
 from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.utils.http import urlsafe_base64_decode
-from django.contrib.auth.models import User
 from django.http import HttpResponse
 
 

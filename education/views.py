@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from .models import Subject , Course , Module , Text , Video , Image , File , Topic , Comment
+from .models import Subject , Course , Module , Text , Video , Image , File , Topic , Comment , Students
+from django.views.generic.list import ListView
+
 
 class BaseView(TemplateView):
     template_name = 'education/base.html'
@@ -46,3 +48,8 @@ class TeacherView(TemplateView):
         ]
         return context
 
+
+
+def about_view(request):
+    students = Students.objects.all()
+    return render(request, 'education/about.html', {'students': students})
