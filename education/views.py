@@ -6,7 +6,13 @@ from django.db.models import Count
 from django.views.generic.detail import DetailView
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.urls import reverse_lazy
+from .forms import CommentForm
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import FormMixin
+from django.urls import reverse
+from django.shortcuts import get_object_or_404, redirect
+from django.views.generic.edit import CreateView
 class BaseView(TemplateView):
     template_name = 'education/base.html'
     def get_context_data(self, **kwargs):
@@ -78,7 +84,17 @@ class SubjectCourseListView(ListView):
         context['subject'] = Subject.objects.get(slug=self.kwargs['slug'])
         return context
 
-class CourseDetailView(DetailView):
+
+
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import FormMixin
+from django.urls import reverse
+from django.shortcuts import redirect
+from .models import Course, Topic, Comment
+from .forms import CommentForm
+
+
+class CourseDetailView( DetailView):
     model = Course
     template_name = 'education/course_detail.html'
     context_object_name = 'course'
@@ -94,6 +110,7 @@ class CourseViewDetail(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         course = self.get_object()
+        context['topics'] = Topic.objects.filter(module__course=self.object)
         context['modules'] = course.modules.prefetch_related('topics__content_type')
         return context
 

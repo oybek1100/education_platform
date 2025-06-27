@@ -11,4 +11,5 @@ urlpatterns = [
     path('subjects/<slug:slug>/', SubjectCourseListView.as_view(), name='subject_courses'),
     path('courses/<int:pk>/', CourseDetailView.as_view(), name='course_detail') ,
     path('courses/<int:pk>/view/', CourseViewDetail.as_view(), name='course_view_detail'),
+
 ]

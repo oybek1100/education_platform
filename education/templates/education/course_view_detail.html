@@ -32,7 +32,35 @@
                 <p class="text-muted">Hech qanday dars yo‘q</p>
             {% endfor %}
         </div>
+        
     </div>
+
+    {% for comment in topic.comments.all %}
+    <div class="mb-2">
+        <strong>{{ comment.user.username }}</strong>
+        <small class="text-muted">{{ comment.created_at|date:"d M Y H:i" }}</small>
+        <p>{{ comment.text }}</p>
+    </div>
+{% empty %}
+    <p class="text-muted">Hozircha kommentariyalar yo‘q.</p>
+{% endfor %}
+
+{% if user.is_authenticated %}
+<form method="post" class="mt-3">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="comment-{{ topic.id }}">Kommentariya:</label>
+        <textarea name="text" id="comment-{{ topic.id }}" rows="3" class="form-control" required></textarea>
+    </div>
+    <input type="hidden" name="topic_id" value="{{ topic.id }}">
+    <button type="submit" class="btn btn-sm btn-primary mt-2">Kommentariya yuborish</button>
+</form>
+{% else %}
+<div class="alert alert-info mt-3">
+    Kommentariya yozish uchun <a href="{% url 'users:login' %}?next={{ request.path }}">tizimga kiring</a>.
+</div>
+{% endif %}
+
     {% empty %}
     <div class="alert alert-warning">Kursda modullar mavjud emas</div>
     {% endfor %}
