@@ -14,6 +14,8 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.utils.http import urlsafe_base64_decode
 from django.http import HttpResponse
+from django.contrib.auth.views import LogoutView
+from django.contrib import messages
 
 
 
@@ -22,6 +24,18 @@ class CustomLoginView(LoginView):
     template_name = 'users/login.html'
     fields = ('username' , 'password')
     success_url = reverse_lazy('education:index')
+
+class CustomLogOutView(LogoutView):
+    template_name = 'education/index.html'
+    next_page = reverse_lazy('education:index')
+    def dispatch(self, request, *args, **kwargs):
+        messages.success(request, "Tizimdan muvaffaqiyatli chiqdingiz.")
+        return super().dispatch(request, *args, **kwargs)
+
+
+
+
+
 
 class CustomRegisterView(CreateView ):
     form_class = CustomUserCreationForm

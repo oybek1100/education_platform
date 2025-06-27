@@ -20,60 +20,151 @@
 <!-- Header End -->
 
 <!-- Category Start -->
-<div class="container-fluid py-5">
-    <div class="container pt-5 pb-3">
-        <div class="text-center mb-5">
-            <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Subjects</h5>
-            <h1>Explore Top Subjects</h1>
-        </div>
-        <div class="row">
-            {% for i in "12345678" %}
-            <div class="col-lg-3 col-md-6 mb-4">
-                <div class="cat-item position-relative overflow-hidden rounded mb-2">
-                    <img class="img-fluid" src="{% static 'education/img/cat-'|add:i|add:'.jpg' %}" alt="">
-                    <a class="cat-overlay text-white text-decoration-none" href="#">
-                        <h4 class="text-white font-weight-medium">Category {{ i }}</h4>
-                        <span>100 Courses</span>
-                    </a>
-                </div>
+<style>
+    .subject-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 5px 5px 0 0;
+    }
+
+    .subject-card .card-body {
+        background: orange;
+        color: #fff;
+        padding: 15px;
+        border-radius: 0 0 5px 5px;
+        text-align: center;
+    }
+
+    .subject-card .card-body h5 {
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    .subject-card .card-body .course-count {
+        color: #000; /* Raqam uchun qora rang */
+        font-weight: bold;
+    }
+
+    .subject-card:hover {
+        transform: translateY(-5px);
+        transition: 0.3s ease-in-out;
+    }
+</style>
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Subjects</h5>
+        <h1>Explore Top Subjects</h1>
+    </div>
+
+    <div class="row justify-content-center">
+        {% for subject in subjects %}
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="subject-card shadow-sm">
+                <a href="{% url 'education:subject_courses' slug=subject.slug %}">
+                    {% if subject.image %}
+                        <img src="{{ subject.image.url }}" alt="{{ subject.title }}">
+                    {% else %}
+                        <img src="{% static 'education/img/default-subject.jpg' %}" alt="Default image">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5>{{ subject.title }}</h5>
+                       
+                    </div>
+                </a>
             </div>
-            {% endfor %}
         </div>
+        {% endfor %}
     </div>
 </div>
+
+
+
 <!-- Category End -->
 
 <!-- Courses Start -->
-<div class="container-fluid py-5">
-    <div class="container py-5">
-        <div class="text-center mb-5">
-            <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Courses</h5>
-            <h1>Our Popular Courses</h1>
-        </div>
-        <div class="row">
-            {% for i in "123456" %}
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="rounded overflow-hidden mb-2">
-                    <img class="img-fluid" src="{% static 'education/img/course-'|add:i|add:'.jpg' %}" alt="">
-                    <div class="bg-secondary p-4">
-                        <div class="d-flex justify-content-between mb-3">
-                            <small class="m-0"><i class="fa fa-users text-primary mr-2"></i>25 Students</small>
-                            <small class="m-0"><i class="far fa-clock text-primary mr-2"></i>01h 30m</small>
-                        </div>
-                        <a class="h5" href="#">Web design & development courses for beginner</a>
-                        <div class="border-top mt-4 pt-4">
-                            <div class="d-flex justify-content-between">
-                                <h6 class="m-0"><i class="fa fa-star text-primary mr-2"></i>4.5 <small>(250)</small></h6>
-                                <h5 class="m-0">$99</h5>
-                            </div>
-                        </div>
+<style>
+    .course-card {
+        border-radius: 10px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .course-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .course-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .course-info {
+        background-color: #343a40; /* Bootstrap bg-secondary */
+        color: #fff;
+        padding: 20px;
+    }
+
+    .course-info a {
+        color: #fff;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .course-info a:hover {
+        text-decoration: underline;
+    }
+
+    .course-meta small {
+        color: #adb5bd;
+    }
+
+    .course-price {
+        color: #ffc107;
+        font-weight: bold;
+    }
+    .course-info a h5{
+        color : white;
+    }
+</style>
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h5 class="text-primary text-uppercase mb-3" style="letter-spacing: 5px;">Courses</h5>
+        <h1>Our Popular Courses</h1>
+    </div>
+
+    <div class="row justify-content-center">
+        {% for course in courses %}
+        <div class="col-lg-4 col-md-6 mb-4 d-flex align-items-stretch">
+            <div class="course-card w-100">
+                <a href="{% url 'education:course_detail' course.id %}">
+                    <img src="{{ course.image.url }}" alt="{{ course.title }}">
+                </a>
+                <div class="course-info">
+                    <div class="d-flex justify-content-between mb-3 course-meta">
+                        <small><i class="fa fa-users text-primary mr-2"></i>{{ course.student_count }} Students</small>
+                        <small><i class="far fa-clock text-primary mr-2"></i>{{ course.duration }}</small>
+                    </div>
+                    <a href="{% url 'education:course_detail' course.id %}">
+                        <h5 class="mb-3">{{ course.title }}</h5>
+                    </a>
+                    <p class="mb-2">{{ course.subject.title }}</p>
+                    <div class="d-flex justify-content-between align-items-center border-top pt-3 mt-3">
+                        <span><i class="fa fa-star text-warning mr-1"></i>4.5 <small>(250)</small></span>
+                        <span class="course-price">${{ course.price }}</span>
                     </div>
                 </div>
             </div>
-            {% endfor %}
         </div>
+        {% endfor %}
     </div>
 </div>
+
 <!-- Courses End -->
 
 <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>

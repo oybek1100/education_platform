@@ -32,7 +32,7 @@
 <div class="container-fluid d-none d-lg-block">
         <div class="row align-items-center py-4 px-xl-5">
             <div class="col-lg-3">
-                <a href="" class="text-decoration-none">
+                <a href="{% url 'education:index' %}" class="text-decoration-none">
                     <h1 class="m-0"><span class="text-primary">E</span>COURSES</h1>
                 </a>
             </div>
@@ -115,7 +115,19 @@
                             <a href="{% url 'education:course' %}" class="nav-item nav-link">Courses</a>
                             <a href="{% url 'education:teacher' %}" class="nav-item nav-link">Teachers</a>
                         </div>
-                        <a class="btn btn-primary py-2 px-4 ml-auto d-none d-lg-block" href="{% url 'users:register' %}">Join Now</a>
+                  {% if user.is_authenticated %}
+                    <form action="{% url 'users:logout' %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary py-2 px-4 ml-auto d-none d-lg-block">
+                            Log out
+                        </button>
+                    </form>
+                {% else %}
+                    <a class="btn btn-primary py-2 px-4 ml-auto d-none d-lg-block" href="{% url 'users:register' %}">
+                        Join Now
+                    </a>
+                {% endif %}
+
                     </div>
                 </nav>
             </div>
@@ -132,14 +144,17 @@
                 <div class="row">
                     <div class="col-md-6 mb-5">
                         <h5 class="text-primary text-uppercase mb-4" style="letter-spacing: 5px;">Get In Touch</h5>
-                        <p><i class="fa fa-map-marker-alt mr-2"></i>123 Street, New York, USA</p>
-                        <p><i class="fa fa-phone-alt mr-2"></i>+012 345 67890</p>
-                        <p><i class="fa fa-envelope mr-2"></i>info@example.com</p>
+                        <a href="https://maps.app.goo.gl/rLz5i6x1S3PKsaa69" target="_blank">
+                            Najot Talim Xadra Filliali
+                        </a>
+                        <hr>
+                        <p><i class="fa fa-phone-alt mr-2"></i>+9989 94 036 05 34</p>
+                        <p><i class="fa fa-envelope mr-2"></i>oybek20051113@gmail.com</p>
                         <div class="d-flex justify-content-start mt-4">
-                            <a class="btn btn-outline-light btn-square mr-2" href="#"><i class="fab fa-twitter"></i></a>
-                            <a class="btn btn-outline-light btn-square mr-2" href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a class="btn btn-outline-light btn-square mr-2" href="#"><i class="fab fa-linkedin-in"></i></a>
-                            <a class="btn btn-outline-light btn-square" href="#"><i class="fab fa-instagram"></i></a>
+                            <a class="btn btn-outline-light btn-square mr-2" href="https://t.me/vrkh13" target="_blank"><i class="fab fa-telegram"></i></a>
+                            <a class="btn btn-outline-light btn-square mr-2" href="https://github.com/oybek1100" target="_blank"><i class="fab fa-github"></i></a>
+                            <a class="btn btn-outline-light btn-square" href="https://www.instagram.com/niroxp" target="_blank"><i class="fab fa-instagram"></i></a>
+
                         </div>
                     </div>
                     <div class="col-md-6 mb-5">

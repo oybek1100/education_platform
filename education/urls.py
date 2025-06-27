@@ -1,4 +1,4 @@
-from .views import IndexView , CourseView , AboutView , TeacherView , about_view
+from .views import IndexView , CourseView , AboutView , TeacherView ,  SubjectCourseListView , CourseDetailView, CourseViewDetail
 from django.urls import path
 
 app_name = 'education'
@@ -8,5 +8,7 @@ urlpatterns = [
     path('courses/', CourseView.as_view(), name='course'),
     path('about', AboutView.as_view(), name='about'),
     path('teacher', TeacherView.as_view(), name='teacher'),
-    path('about/', about_view, name='about'),  
+    path('subjects/<slug:slug>/', SubjectCourseListView.as_view(), name='subject_courses'),
+    path('courses/<int:pk>/', CourseDetailView.as_view(), name='course_detail') ,
+    path('courses/<int:pk>/view/', CourseViewDetail.as_view(), name='course_view_detail'),
 ]

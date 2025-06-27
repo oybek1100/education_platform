@@ -1,12 +1,14 @@
 from django.db import models
-from django.conf import settings  # <-- Faqat shu kerak, `auth.User` emas!
+from django.conf import settings  
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
+from django.views.generic import ListView
 
 
 class Subject(models.Model):
     title = models.CharField(max_length=255, unique=True)
     slug = models.SlugField(unique=True)
+    image = models.ImageField(upload_to='subject/images' , null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -60,7 +62,7 @@ class Video(ItemBase):
     url = models.URLField()
 
     def __str__(self):
-        return self.title
+        return f'{self.title} - {self.pk}'
 
 
 class Image(ItemBase):
@@ -90,6 +92,11 @@ class Topic(models.Model):
 
     class Meta:
         ordering = ['my_order']
+    def __str__(self):
+        return f"{self.module.title} - {self.content_type} - {self.item}"
+
+
+
 
 
 class Comment(models.Model):
@@ -121,4 +128,27 @@ class Students(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class LatestNews(models.Model):
+    image = models.ImageField(upload_to='news/images')
+    title = models.TextField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+
+class SubjectCourseListView(ListView):
+    model = Course
+    template_name = 'education/subject_courses.html'
+    context_object_name = 'courses'
+
+    def get_queryset(self):
+        return Course.objects.filter(subject__slug=self.kwargs['slug'])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['subject'] = Subject.objects.get(slug=self.kwargs['slug'])
+        return context
 
