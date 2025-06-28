@@ -21,8 +21,6 @@ class BaseView(TemplateView):
         return context
 
 
-from django.views.generic import TemplateView
-from .models import Students, Subject, LatestNews
 
 class IndexView(TemplateView):
     template_name = 'education/index.html'
@@ -55,10 +53,7 @@ class AboutView(TemplateView):
 
 class TeacherView(TemplateView):
     template_name = 'education/teacher.html'
-    from django.views.generic import TemplateView
 
-class TeacherView(TemplateView):
-    template_name = 'education/teacher.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -86,12 +81,6 @@ class SubjectCourseListView(ListView):
 
 
 
-from django.views.generic.detail import DetailView
-from django.views.generic.edit import FormMixin
-from django.urls import reverse
-from django.shortcuts import redirect
-from .models import Course, Topic, Comment
-from .forms import CommentForm
 
 
 class CourseDetailView( DetailView):
@@ -113,4 +102,3 @@ class CourseViewDetail(LoginRequiredMixin, DetailView):
         context['topics'] = Topic.objects.filter(module__course=self.object)
         context['modules'] = course.modules.prefetch_related('topics__content_type')
         return context
-
