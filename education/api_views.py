@@ -62,9 +62,9 @@ class CourseListView(APIView):
 
 
 class CourseDetailViewww(APIView):
-    def get(self , request,slug ):
+    def get(self , request,pk):
         try :
-            course = Course.objects.get(slug = slug)
+            course = Course.objects.get(pk = pk)
             serializer = CourseSerializer(course)
             return Response(serializer.data , status=HTTP_200_OK)
         except Course.DoesNotExist:
@@ -79,9 +79,9 @@ class CourseCreateView(APIView):
         return Response(serializer.errors , status=HTTP_400_BAD_REQUEST)
     
 class CourseUpdateView(APIView):
-    def put(self  , request , slug):
+    def put(self  , request , pk):
         try:
-            course = Course.objects.get(slug = slug)
+            course = Course.objects.get(slug = pk)
             serializer = CourseSerializer(course , data = request.data)
             if serializer.is_valid():
                 serializer.save()
@@ -92,9 +92,9 @@ class CourseUpdateView(APIView):
         
 
 class CourseDeleteView(APIView):
-    def delete(self , request, slug):
+    def delete(self , request, pk):
         try :
-            course = Course.objects.get(slug = slug)
+            course = Course.objects.get(slug = pk)
             course.delete()
             return Response(status=HTTP_200_OK)
         except Course.DoesNotExist:

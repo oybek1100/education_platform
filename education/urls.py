@@ -36,7 +36,7 @@ urlpatterns = [
     # ==== API: Courses ====
     path('api/courses/', CourseListView.as_view(), name='api-course-list'),
     path('api/courses/create/', CourseCreateView.as_view(), name='api-course-create'),
-    path('api/courses/<slug:slug>/', CourseDetailViewww.as_view(), name='api-course-detail'),
-    path('api/courses/<slug:slug>/update/', CourseUpdateView.as_view(), name='api-course-update'),
-    path('api/courses/<slug:slug>/delete/', CourseDeleteView.as_view(), name='api-course-delete'),
+    path('api/courses/<int:pk>/', CourseDetailViewww.as_view(), name='api-course-detail'),
+    path('api/courses/<int:pk>/update/', CourseUpdateView.as_view(), name='api-course-update'),
+    path('api/courses/<int:pk>/delete/', CourseDeleteView.as_view(), name='api-course-delete'),
 ]
