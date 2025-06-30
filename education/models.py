@@ -7,7 +7,7 @@ from django.views.generic import ListView
 
 class Subject(models.Model):
     title = models.CharField(max_length=255, unique=True)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True )
     image = models.ImageField(upload_to='subject/images' , null=True, blank=True)
 
     def __str__(self):
@@ -32,6 +32,8 @@ class Course(models.Model):
 
     def __str__(self):
         return self.title
+
+    
 
 
 class Module(models.Model):

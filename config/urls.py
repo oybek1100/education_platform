@@ -24,5 +24,6 @@ urlpatterns = [
     path('', include('education.urls')),
     path('users/', include('users.urls')),
     path('auth/', include('social_django.urls', namespace='social')),
+    path('api-auth/', include('rest_framework.urls'))
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
