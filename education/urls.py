@@ -1,14 +1,18 @@
 from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .api_views import TopicViewSet , CommentViewSet
+
+
+
 from .views import (
     IndexView, CourseView, AboutView, TeacherView,
     SubjectCourseListView, CourseDetailView, CourseViewDetail
 )
 
 from .api_views import (
-    SubjectListView, SubjectDetialView, SubjectCreateView,
-    SubjectUpdateView, SubjectDeleteView,
-    CourseListView, CourseDetailViewww, CourseCreateView,
-    CourseUpdateView, CourseDeleteView
+    SubjectListView, 
+  CourseCreateView , AllMethodsCourseView
+   
 )
 
 app_name = 'education'
@@ -28,15 +32,18 @@ urlpatterns = [
 
     # ==== API: Subjects ====
     path('api/subjects/', SubjectListView.as_view(), name='api-subject-list'),
-    path('api/subjects/create/', SubjectCreateView.as_view(), name='api-subject-create'),
-    path('api/subjects/<slug:slug>/', SubjectDetialView.as_view(), name='api-subject-detail'),
-    path('api/subjects/<slug:slug>/update/', SubjectUpdateView.as_view(), name='api-subject-update'),
-    path('api/subjects/<slug:slug>/delete/', SubjectDeleteView.as_view(), name='api-subject-delete'),
+
+  
 
     # ==== API: Courses ====
-    path('api/courses/', CourseListView.as_view(), name='api-course-list'),
-    path('api/courses/create/', CourseCreateView.as_view(), name='api-course-create'),
-    path('api/courses/<int:pk>/', CourseDetailViewww.as_view(), name='api-course-detail'),
-    path('api/courses/<int:pk>/update/', CourseUpdateView.as_view(), name='api-course-update'),
-    path('api/courses/<int:pk>/delete/', CourseDeleteView.as_view(), name='api-course-delete'),
+      path('api/courses/<int:pk>', AllMethodsCourseView.as_view(), name='api-subject-delete'),
+      path('api/courses/create/', CourseCreateView.as_view(), name='api-course-create'),
+
 ]
+
+router = DefaultRouter()
+router.register(r'topics', TopicViewSet, basename='topic')
+router.register(r'comments', CommentViewSet, basename='comment')
+
+urlpatterns = router.urls
+

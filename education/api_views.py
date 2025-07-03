@@ -1,102 +1,45 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Subject , Course
+from .models import Subject , Course , Topic , Comment
 from rest_framework.status import HTTP_200_OK , HTTP_404_NOT_FOUND , HTTP_201_CREATED , HTTP_400_BAD_REQUEST
-from .serializers import SubjectSerializer , CourseSerializer
+from .serializers import SubjectSerializer , CourseSerializer , TopicSerializer , CommentSerializer
+from rest_framework.generics import ListCreateAPIView , RetrieveUpdateDestroyAPIView
+from rest_framework import permissions , viewsets
+from django.db.models import Avg
 
 
-class SubjectListView(APIView):
-    def get(self, request, ):
-        subject = Subject.objects.all()
-        serializer = SubjectSerializer(subject , many=True)
-        return Response(serializer.data)  
-    
+class SubjectListView(ListCreateAPIView):
+ 
+    serializer_class = SubjectSerializer
+    def get_queryset(self):
+        return Subject.objects.all().order_by('-id')
+   
+# class SubjectListView(APIView):
+#     def get(self , request):
+#         subject = Subject.objects.all()
+#         serializer = SubjectSerializer(subject , many=True , context = {'request': request})
+#         return Response(serializer.data , status=HTTP_200_OK)
 
 
 
-class SubjectDetialView(APIView):
-    def get(self , request , slug):
-        try:
-            subject = Subject.objects.get(slug = slug) #sluglari webDeveloping , mobileDeveloping
-            serializer = SubjectSerializer(subject)
-            return Response(serializer.data , status=HTTP_200_OK)
-        except Subject.DoesNotExist:
-            return Response(status=HTTP_404_NOT_FOUND)
-
-class SubjectCreateView(APIView):
-    def post(self , request):
-        serializer = SubjectSerializer( data = request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response( serializer.data , status=HTTP_201_CREATED)
-        return Response(serializer.errors , status=HTTP_400_BAD_REQUEST)
 
 
-class SubjectUpdateView(APIView):
-    def put(self , request , slug):
-        try:
-            subject = Subject.objects.get(slug = slug)
-            serializer = SubjectSerializer(subject , data = request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data , status=HTTP_200_OK)
-            return Response(serializer.errors , status=HTTP_400_BAD_REQUEST)
-        except Subject.DoesNotExist:
-            return Response(status=HTTP_404_NOT_FOUND)
+class CourseCreateView(ListCreateAPIView):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
 
-class SubjectDeleteView(APIView):
-    def delete(self , request , slug):
-        try:
-            subject = Subject.objects.get(slug = slug)
-            subject.delete()
-            return Response(status=HTTP_200_OK)
-        except Subject.DoesNotExist:
-            return Response(status=HTTP_404_NOT_FOUND)
+class AllMethodsCourseView(RetrieveUpdateDestroyAPIView):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
 
 
-class CourseListView(APIView):
-    def get(self , request):
-        course = Course.objects.all()
-        serializer = CourseSerializer(course , many=True)
-        return Response(serializer.data)
+#Menda comment topicga ulangan ekan shunga topicni yozyabman
 
+class TopicViewSet(viewsets.ModelViewSet):
+    queryset = Topic.objects.all().annotate(avg_rating=Avg('comments__rating'))
+    serializer_class = TopicSerializer
 
-class CourseDetailViewww(APIView):
-    def get(self , request,pk):
-        try :
-            course = Course.objects.get(pk = pk)
-            serializer = CourseSerializer(course)
-            return Response(serializer.data , status=HTTP_200_OK)
-        except Course.DoesNotExist:
-            return Response(status=HTTP_404_NOT_FOUND)
-
-class CourseCreateView(APIView):
-    def post(self , request):
-        serializer = CourseSerializer(data = request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data , status=HTTP_201_CREATED)
-        return Response(serializer.errors , status=HTTP_400_BAD_REQUEST)
-    
-class CourseUpdateView(APIView):
-    def put(self  , request , pk):
-        try:
-            course = Course.objects.get(slug = pk)
-            serializer = CourseSerializer(course , data = request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data , status=HTTP_200_OK)
-            return Response(serializer.errors , status=HTTP_400_BAD_REQUEST)
-        except Course.DoesNotExist:
-            return Response(serializer.errors , status=HTTP_404_NOT_FOUND)
-        
-
-class CourseDeleteView(APIView):
-    def delete(self , request, pk):
-        try :
-            course = Course.objects.get(slug = pk)
-            course.delete()
-            return Response(status=HTTP_200_OK)
-        except Course.DoesNotExist:
-            return Response(  status=HTTP_404_NOT_FOUND)
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
             

@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings  
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
-from django.views.generic import ListView
+from django.views.generic import ListView 
 
 
 class Subject(models.Model):
@@ -119,6 +119,7 @@ class Comment(models.Model):
     text = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    rating = models.IntegerField(default=0)
 
     def __str__(self):
         return self.text
